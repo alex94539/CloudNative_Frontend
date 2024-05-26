@@ -1,10 +1,10 @@
 // @ts-check
-import withNuxt from "./.nuxt/eslint.config.mjs";
+import withNuxt from './.nuxt/eslint.config.mjs'
 // @ts-expect-error
-import eslintConfigPrettier from "eslint-config-prettier";
+import eslintConfigPrettier from 'eslint-config-prettier'
 
 export default withNuxt({
   rules: {
-    "prettier/prettier": "off",
+    'prettier/prettier': 'off',
   },
-}).append(eslintConfigPrettier);
+}).append(eslintConfigPrettier)

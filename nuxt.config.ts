@@ -1,9 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['nuxt-primevue',
-    '@nuxt/eslint'
-  ],
+  modules: ['nuxt-primevue', '@nuxt/eslint'],
   css: ['~/assets/css/main.css'],
   postcss: {
     plugins: {
@@ -11,5 +9,5 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  primevue: {}
+  primevue: {},
 })
