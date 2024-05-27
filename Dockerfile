@@ -1,18 +1,19 @@
 # Build Stage
 FROM node AS builder
-
+RUN corepack enable pnpm 
 # Set working directory
 WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package*.json ./
-RUN npm install --legacy-peer-deps
+COPY pnpm-lock.yaml ./
+RUN pnpm i --frozen-lockfile
 
 # Copy the rest of the project
 COPY . .
 
 # Build the Nuxt app for production
-RUN npm run build
+RUN pnpm build
 
 # Production Stage
 FROM node
