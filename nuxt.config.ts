@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['nuxt-primevue', '@nuxt/eslint'],
+  modules: ['nuxt-primevue', '@nuxt/eslint', '@vueuse/nuxt', '@pinia/nuxt'],
   css: ['~/assets/css/main.css'],
   postcss: {
     plugins: {
@@ -10,4 +10,10 @@ export default defineNuxtConfig({
     },
   },
   primevue: {},
+  runtimeConfig: {
+    public: {
+      apiBase: 'https://meeing-center.ddns.net/api',
+    },
+  },
+  ssr: true,
 })
