@@ -1,12 +1,13 @@
 <script setup lang="ts">
 const username = ref('')
 const password = ref('')
+const rememberMe = ref(true)
 
 const isLoading = ref(false)
 const shouldShowErrMsg = ref(false)
 
 const runtimeConfig = useRuntimeConfig()
-const identityStore = useUserIdentityStore()
+const authStore = useAuthStore()
 
 const emits = defineEmits<{
   loginSuccess: [token: string]
@@ -69,7 +70,7 @@ watch(loginResponseStatus, (newValue) => {
 
 watch(isLoginSuccessful, (status) => {
   if (status && loginResponseData.value) {
-    identityStore.setJwtToken(loginResponseData.value.token)
+    authStore.setJwtToken(loginResponseData.value.token, rememberMe.value)
     emits('loginSuccess', loginResponseData.value.token)
   }
 })
@@ -98,7 +99,7 @@ const doLogin = () => {
         >
       </div>
 
-      <div class="flex flex-col gap-y-8">
+      <form class="flex flex-col gap-y-8" @submit.prevent="doLogin">
         <div class="flex flex-col gap-y-2">
           <label for="username">帳號</label>
           <InputText id="username" v-model="username" />
@@ -113,9 +114,13 @@ const doLogin = () => {
             :feedback="false"
           />
         </div>
+        <div class="flex items-center gap-2">
+          <Checkbox id="rememberme" v-model="rememberMe" />
+          <label for="rememberme">記住我</label>
+        </div>
 
-        <Button label="登入" :loading="isLoading" @click="doLogin" />
-      </div>
+        <Button label="登入" :loading="isLoading" type="submit" />
+      </form>
     </template>
   </Card>
 </template>

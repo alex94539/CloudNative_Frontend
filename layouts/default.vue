@@ -35,7 +35,7 @@ const items = ref([
   // },
 ])
 
-const identityStore = useUserIdentityStore()
+const identityStore = useAuthStore()
 const { isLoggedIn } = storeToRefs(identityStore)
 </script>
 
