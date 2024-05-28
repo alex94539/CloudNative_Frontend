@@ -115,7 +115,7 @@ const doLogin = () => {
           />
         </div>
         <div class="flex items-center gap-2">
-          <Checkbox id="rememberme" v-model="rememberMe" />
+          <Checkbox id="rememberme" v-model="rememberMe" :binary="true"/>
           <label for="rememberme">記住我</label>
         </div>
 

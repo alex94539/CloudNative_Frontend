@@ -5,38 +5,11 @@ const items = ref([
     icon: 'pi pi-link',
     route: '/',
   },
-  // {
-  //   label: 'Router',
-  //   icon: 'pi pi-palette',
-  //   items: [
-  //     {
-  //       label: 'Styled',
-  //       route: '/theming',
-  //     },
-  //     {
-  //       label: 'Unstyled',
-  //       route: '/unstyled',
-  //     },
-  //   ],
-  // },
-  // {
-  //   label: 'External',
-  //   icon: 'pi pi-home',
-  //   items: [
-  //     {
-  //       label: 'Vue.js',
-  //       url: 'https://vuejs.org/',
-  //     },
-  //     {
-  //       label: 'Vite.js',
-  //       url: 'https://vuejs.org/',
-  //     },
-  //   ],
-  // },
 ])
 
-const identityStore = useAuthStore()
-const { isLoggedIn } = storeToRefs(identityStore)
+const authStore = useAuthStore()
+const { isLoggedIn } = storeToRefs(authStore)
+
 </script>
 
 <template>
@@ -68,17 +41,12 @@ const { isLoggedIn } = storeToRefs(identityStore)
       </template>
 
       <template #end>
-        <div v-if="isLoggedIn" class="flex items-center gap-2">
-          Username
-          <Avatar
-            image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
-            :shape="'circle'"
-          />
-        </div>
-
-        <NuxtLink v-else to="/login">
-          <Button label="登入" />
-        </NuxtLink>
+        <ClientOnly>
+          <UiUserMenu v-if="isLoggedIn" />
+          <NuxtLink v-else to="/login">
+            <Button label="登入" />
+          </NuxtLink>
+        </ClientOnly>
       </template>
     </Menubar>
     <slot />
