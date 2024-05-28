@@ -12,7 +12,9 @@ export const useAuthStore = defineStore('authStore', () => {
   })
 
   const jwtToken = computed(() => {
-    if (_sessionJwtToken.value.length > 0)
+    if(_sessionJwtToken.value===null && _localJwtToken.value===null)
+      return ''
+    else if (_sessionJwtToken.value.length > 0)
       return _sessionJwtToken.value
     else
       return _localJwtToken.value

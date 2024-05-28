@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+setPageLayout('blank')
+</script>
 
 <template>
-  <div class="w-fit mx-auto mt-32">
-    <Login />
+  <div class="flex h-screen items-center justify-center">
+    <Login @login-success="navigateTo('/')" />
   </div>
 </template>
