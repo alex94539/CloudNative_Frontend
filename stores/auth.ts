@@ -1,5 +1,13 @@
 import { skipHydrate } from 'pinia'
-import { useStorage } from '@vueuse/core'
+
+type userRole = 'Admin' | 'User'
+interface JwtPayload {
+  role: userRole
+  username: string
+  _id: string
+  iat: number
+  exp: number
+}
 
 export const useAuthStore = defineStore('authStore', () => {
   const tokenKey = 'token'
@@ -12,18 +20,35 @@ export const useAuthStore = defineStore('authStore', () => {
   })
 
   const jwtToken = computed(() => {
-    if(_sessionJwtToken.value===null && _localJwtToken.value===null)
-      return ''
-    else if (_sessionJwtToken.value.length > 0)
+    if (_sessionJwtToken.value !== null &&
+      _sessionJwtToken.value.length > 0) {
       return _sessionJwtToken.value
-    else
+    } else if (_localJwtToken.value !== null &&
+      _localJwtToken.value.length > 0) {
       return _localJwtToken.value
+    } else return ""
   })
   const isLoggedIn = computed(() => jwtToken.value.length > 0)
 
   function setJwtToken(token: string, isLocalStorage = false) {
-    const state = isLocalStorage ? (_localJwtToken) : (_sessionJwtToken)
+    const state = isLocalStorage ? _localJwtToken : _sessionJwtToken
     state.value = token
+    console.log(parseJwt())
+  }
+
+  function parseJwt(): JwtPayload {
+    const base64Url = jwtToken.value.split('.')[1]
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        })
+        .join('')
+    )
+
+    return JSON.parse(jsonPayload)
   }
 
   function clear() {
@@ -41,5 +66,6 @@ export const useAuthStore = defineStore('authStore', () => {
     setJwtToken,
     isLoggedIn,
     clear,
+    parseJwt,
   }
 })

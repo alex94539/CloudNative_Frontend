@@ -11,7 +11,7 @@ const items = ref([
         icon: 'pi pi-refresh',
         command: () => {
           emits('logout')
-          useAuthStore().clear()
+          loginHelper.logout()
         },
       },
     ],
@@ -21,12 +21,15 @@ const items = ref([
 const menu = ref()
 
 const toggleMenu = (ev: Event) => menu.value.toggle(ev)
+
+const userStore = useUserStore()
+const { data } = storeToRefs(userStore)
 </script>
 
 <template>
   <div>
-    <Button class="flex items-center gap-2" @click="toggleMenu">
-      Username
+    <Button class="flex items-center gap-2" @click="toggleMenu" outlined>
+      {{ data.username }}
       <Avatar
         image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
         :shape="'circle'"

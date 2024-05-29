@@ -70,7 +70,7 @@ watch(loginResponseStatus, (newValue) => {
 
 watch(isLoginSuccessful, (status) => {
   if (status && loginResponseData.value) {
-    authStore.setJwtToken(loginResponseData.value.token, rememberMe.value)
+    loginHelper.login(loginResponseData.value.token, rememberMe.value)
     emits('loginSuccess', loginResponseData.value.token)
   }
 })
@@ -115,7 +115,7 @@ const doLogin = () => {
           />
         </div>
         <div class="flex items-center gap-2">
-          <Checkbox id="rememberme" v-model="rememberMe" :binary="true"/>
+          <Checkbox id="rememberme" v-model="rememberMe" :binary="true" />
           <label for="rememberme">記住我</label>
         </div>
 

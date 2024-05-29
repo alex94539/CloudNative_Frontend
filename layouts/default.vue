@@ -9,7 +9,6 @@ const items = ref([
 
 const authStore = useAuthStore()
 const { isLoggedIn } = storeToRefs(authStore)
-
 </script>
 
 <template>
