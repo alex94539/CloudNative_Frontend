@@ -29,6 +29,10 @@ export const useUserStore = defineStore('user', () => {
     }
   })
 
+  const isAdmin = computed(() => {
+    return data.value.role === 'Admin'
+  })
+
   function set(data: UserData, isLocalStorage = false) {
     if (isLocalStorage) {
       _localData.value = data
@@ -46,6 +50,7 @@ export const useUserStore = defineStore('user', () => {
     role: skipHydrate(_localData),
     username: skipHydrate(_sessionData),
     data,
+    isAdmin,
     set,
     clear,
   }
