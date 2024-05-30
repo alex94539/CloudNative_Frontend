@@ -8,7 +8,7 @@ export default defineNuxtPlugin({
 
         if (isLoggedIn.value) {
           options.headers = options.headers || {}
-          // @ts-ignore
+          // @ts-expect-error
           options.headers.authorization = `Bearer ${jwtToken.value}`
         }
       },

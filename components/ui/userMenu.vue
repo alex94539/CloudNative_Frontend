@@ -28,7 +28,7 @@ const { data } = storeToRefs(userStore)
 
 <template>
   <div>
-    <Button class="flex items-center gap-2" @click="toggleMenu" outlined>
+    <Button class="flex items-center gap-2" outlined @click="toggleMenu">
       {{ data.username }}
       <Avatar
         image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
