@@ -20,13 +20,14 @@ export const useAuthStore = defineStore('authStore', () => {
   })
 
   const jwtToken = computed(() => {
-    if (_sessionJwtToken.value !== null &&
-      _sessionJwtToken.value.length > 0) {
+    if (_sessionJwtToken.value !== null && _sessionJwtToken.value.length > 0) {
       return _sessionJwtToken.value
-    } else if (_localJwtToken.value !== null &&
-      _localJwtToken.value.length > 0) {
+    } else if (
+      _localJwtToken.value !== null &&
+      _localJwtToken.value.length > 0
+    ) {
       return _localJwtToken.value
-    } else return ""
+    } else return ''
   })
   const isLoggedIn = computed(() => jwtToken.value.length > 0)
 
