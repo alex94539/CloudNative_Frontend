@@ -17,7 +17,7 @@ const { isLoggedIn } = storeToRefs(authStore)
 </script>
 
 <template>
-  <div class="card">
+  <div class="h-full">
     <Menubar :model="items">
       <template #item="{ item, props, hasSubmenu }">
         <NuxtLink
@@ -53,6 +53,22 @@ const { isLoggedIn } = storeToRefs(authStore)
         </ClientOnly>
       </template>
     </Menubar>
-    <slot />
+    <div class="grid grid-cols-11 h-full gap-x-6">
+      <UiSideMenu class="col-span-2" />
+      <div class="col-span-9">
+        <slot />
+      </div>
+    </div>
   </div>
 </template>
+
+<style>
+body,
+html {
+  height: 100%;
+}
+
+#__nuxt {
+  height: 100%;
+}
+</style>
