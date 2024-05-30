@@ -6,7 +6,10 @@ export interface RoomListItem {
 export type RoomList = RoomListItem[]
 export const apiGetRoomList = async () => {
   const { $authorizedApi } = useNuxtApp()
-  return await useFetch<RoomList>('/info/rooms', { $fetch: $authorizedApi, server: false })
+  return await useFetch<RoomList>('/info/rooms', {
+    $fetch: $authorizedApi,
+    server: false,
+  })
 }
 
 export interface RoomInfo {
@@ -19,13 +22,30 @@ export interface RoomInfo {
 }
 export const apiGetRoomInfo = async (id: string) => {
   const { $authorizedApi } = useNuxtApp()
-  return await useAsyncData<RoomInfo>(() => $authorizedApi('/info/room',
+  return await useAsyncData<RoomInfo>(
+    () =>
+      $authorizedApi('/info/room', {
+        query: {
+          roomId: id,
+        },
+      }),
     {
+      pick: ['_id', 'name', 'building', 'capacity', 'area', 'eating'],
+    }
+  )
+}
+export const apiPatchRoomInfo = async (data: RoomInfo) => {
+  const { $authorizedApi } = useNuxtApp()
+  const roomId = data._id
+  const body = { ...data } as any
+  delete body._id
+  return await useAsyncData(() =>
+    $authorizedApi('/info/room', {
+      method: 'PATCH',
+      body,
       query: {
-        roomId: id
-      }
-    }),
-    {
-      pick: ['_id', 'name', 'building', 'capacity', 'area', 'eating']
+        roomId,
+      },
     })
+  )
 }
