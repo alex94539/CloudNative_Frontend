@@ -1,11 +1,31 @@
-interface RoomListItem {
+export interface RoomListItem {
   _id: string
   name: string
   building: string
 }
-
-type RoomList = RoomListItem[]
-const { $authorizedApi } = useNuxtApp()
+export type RoomList = RoomListItem[]
 export const apiGetRoomList = async () => {
-  return await useFetch<RoomList>('/info/rooms', { $fetch: $authorizedApi })
+  const { $authorizedApi } = useNuxtApp()
+  return await useFetch<RoomList>('/info/rooms', { $fetch: $authorizedApi, server: false })
+}
+
+export interface RoomInfo {
+  _id: string
+  name: string
+  building: string
+  capacity: number
+  area: number
+  eating: boolean
+}
+export const apiGetRoomInfo = async (id: string) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData<RoomInfo>(() => $authorizedApi('/info/room',
+    {
+      query: {
+        roomId: id
+      }
+    }),
+    {
+      pick: ['_id', 'name', 'building', 'capacity', 'area', 'eating']
+    })
 }
