@@ -34,6 +34,20 @@ const modalSubmitHandler = (modalData: RoomInfo) => {
     })
   } else editRoomModalVisible.value = false
 }
+
+const confirmService = useConfirm()
+const deleteRoomHandler = (room: RoomInfo) => {
+  confirmService.require({
+    header: '警告',
+    icon: 'pi pi-exclamation-triangle',
+    message: `確定要刪除「${room.name}」會議室嗎？`,
+    rejectLabel: '取消',
+    acceptLabel: '確認',
+    acceptClass: 'p-button-danger',
+    rejectClass: 'p-button-secondary',
+    blockScroll: true,
+  })
+}
 </script>
 <template>
   <div>
@@ -47,13 +61,19 @@ const modalSubmitHandler = (modalData: RoomInfo) => {
               icon="pi pi-pencil"
               @click="() => openEditModal(slotProps.data._id)"
             />
-            <Button :severity="'danger'" icon="pi pi-trash" />
+            <Button
+              :severity="'danger'"
+              icon="pi pi-trash"
+              @click="() => deleteRoomHandler(slotProps.data)"
+            />
           </div>
           <AdminEditRoomModal
             v-model:visible="editRoomModalVisible"
+            title="編輯會議室"
             :data="roomInfo!"
             @submit="modalSubmitHandler($event)"
           />
+          <ConfirmDialog />
         </template>
       </Column>
     </DataTable>

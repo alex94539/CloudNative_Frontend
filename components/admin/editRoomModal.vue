@@ -4,6 +4,7 @@ import type { RoomInfo } from '~/utils/useApi'
 type ModalData = Omit<RoomInfo, '__v'>
 
 const props = defineProps<{
+  title: string
   data: ModalData
 }>()
 const emits = defineEmits<{
@@ -53,7 +54,7 @@ const blockButton = ref(false)
     @show="dialogOpenHandler()"
   >
     <template #header>
-      <div class="text-lg font-bold">編輯會議室</div>
+      <div class="text-lg font-bold">{{ props.title }}</div>
     </template>
 
     <template #default>
