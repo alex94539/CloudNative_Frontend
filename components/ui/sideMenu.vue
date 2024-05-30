@@ -13,7 +13,7 @@ const items = ref([
 ])
 </script>
 <template>
-  <div class="border-r">
+  <div class="pt-10">
     <PanelMenu :model="items">
       <template #item="{ item }">
         <NuxtLink
