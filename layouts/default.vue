@@ -1,4 +1,9 @@
 <script setup lang="ts">
+useHead({
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} | Meeting Center` : 'Meeting Center'
+  },
+})
 const items = ref([
   {
     label: 'Meeting Center',
