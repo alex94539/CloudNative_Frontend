@@ -58,3 +58,42 @@ export const apiCreateRoomInfo = async (data: Omit<RoomInfo, '_id'>) => {
     })
   )
 }
+
+export interface UserListItem {
+  firstName: string
+  lastName: string
+  email: string
+  username: string
+  password: string
+  role: 'Admin' | 'User'
+}
+export interface UserListResponse extends UserListItem {
+  _id: string
+  __v: string
+}
+export const apiGetUserList = async () => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useFetch<UserListResponse[]>('/user/users', {
+    $fetch: $authorizedApi,
+    server: false,
+  })
+}
+export const apiGetUserInfo = async (userId: string) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/user/user', {
+      query: {
+        userId,
+      },
+    })
+  )
+}
+export const apiCreateUserInfo = async (body: UserListItem) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/user/user', {
+      method: 'POST',
+      body,
+    })
+  )
+}

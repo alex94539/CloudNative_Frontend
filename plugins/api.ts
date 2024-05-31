@@ -2,7 +2,7 @@ export default defineNuxtPlugin({
   setup() {
     const authorizedApi = $fetch.create({
       baseURL: useRuntimeConfig().public.apiBase,
-      onRequest({ request, options }) {
+      onRequest({ options }) {
         const authStore = useAuthStore()
         const { isLoggedIn, jwtToken } = storeToRefs(authStore)
 

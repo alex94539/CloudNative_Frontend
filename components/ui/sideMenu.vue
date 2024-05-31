@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { AdminCreateRoomHandler } from '#build/components'
+import {
+  type AdminCreateRoomHandler,
+  type AdminCreateUserHandler,
+} from '#components'
 
 const items = ref([
   {
@@ -14,6 +17,7 @@ const items = ref([
   },
 ])
 const createRoomModal = ref<InstanceType<typeof AdminCreateRoomHandler>>()
+const createUserModal = ref<InstanceType<typeof AdminCreateUserHandler>>()
 const splitBtnItems = [
   {
     label: '建立會議室',
@@ -24,8 +28,10 @@ const splitBtnItems = [
   },
   {
     label: '建立使用者',
-    icon: 'pi pi-times',
-    command: () => {},
+    icon: 'pi pi-user',
+    command: () => {
+      createUserModal.value?.show()
+    },
   },
   {
     label: '建立會議',
@@ -37,6 +43,7 @@ const splitBtnItems = [
 <template>
   <div class="pt-10">
     <AdminCreateRoomHandler ref="createRoomModal" />
+    <AdminCreateUserHandler ref="createUserModal" />
     <SplitButton class="w-full" :model="splitBtnItems" label="新增">
     </SplitButton>
 

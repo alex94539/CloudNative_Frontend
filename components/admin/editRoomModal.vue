@@ -67,7 +67,7 @@ const blockButton = ref(false)
     @show="dialogOpenHandler()"
   >
     <template #header>
-      <div class="text-lg font-bold">{{ props.title }}</div>
+      <UiModalHeader>{{ props.title }}</UiModalHeader>
     </template>
 
     <template #default>
