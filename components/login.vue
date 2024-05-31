@@ -2,12 +2,13 @@
 const username = ref('')
 const password = ref('')
 const rememberMe = ref(true)
-
+const isLoginDisabled = computed(() => {
+  return username.value.length == 0 && password.value.length == 0
+})
 const isLoading = ref(false)
 const shouldShowErrMsg = ref(false)
 
 const runtimeConfig = useRuntimeConfig()
-const authStore = useAuthStore()
 
 const emits = defineEmits<{
   loginSuccess: [token: string]
@@ -15,44 +16,29 @@ const emits = defineEmits<{
 interface LoginApiResponse {
   token: string
 }
-// const {
-//   data,
-//   pending,
-//   status,
-//   error,
-//   execute: doLogin,
-//   clear,
-// } = await useAsyncData(
-//   () =>
-//     $fetch('/authenticate/login', {
-//       baseURL: runtimeConfig.public.apiBase,
-//       method: 'POST',
-//       body: {
-//         username: username.value,
-//         password: password.value,
-//       },
-//       onResponse({ response }) {
-//         console.log(response)
-//         isLoading.value = false
-//       },
-//     }),
-//   { immediate: false }
-// )
+const apiLogin = await useFetch<LoginApiResponse>('/authenticate/login', {
+  baseURL: runtimeConfig.public.apiBase,
+  server: false,
+  immediate: false,
+  method: 'POST',
+  body: {
+    username: username,
+    password: password,
+  },
+  watch: false,
+  onResponse() {
+    isLoading.value = false
+  },
+  onResponseError() {
+    shouldShowErrMsg.value = true
+  },
+})
 
 const {
   data: loginResponseData,
   execute: sendLoginApi,
   status: loginResponseStatus,
-} = await useAsyncData<LoginApiResponse>(
-  () =>
-    $fetch('/authenticate/root', {
-      baseURL: runtimeConfig.public.apiBase,
-      onResponse({ response }) {
-        console.log(response)
-      },
-    }),
-  { immediate: false }
-)
+} = apiLogin
 
 const isLoginSuccessful = computed(() => {
   return (
@@ -60,12 +46,6 @@ const isLoginSuccessful = computed(() => {
     loginResponseData.value != null &&
     loginResponseData.value.token.length > 0
   )
-})
-
-watch(loginResponseStatus, (newValue) => {
-  if (newValue === 'error') {
-    shouldShowErrMsg.value = true
-  }
 })
 
 watch(isLoginSuccessful, (status) => {
@@ -89,15 +69,6 @@ const doLogin = () => {
       <Message v-show="shouldShowErrMsg" :severity="'error'"
         >帳號或密碼不正確</Message
       >
-      <Message v-show="isLoginSuccessful" :severity="'success'"
-        >成功取得token: {{ loginResponseData?.token }}</Message
-      >
-
-      <div class="text-center">
-        <InlineMessage :severity="'info'" class=""
-          >測試中免帳密直接登入root帳號</InlineMessage
-        >
-      </div>
 
       <form class="flex flex-col gap-y-8" @submit.prevent="doLogin">
         <div class="flex flex-col gap-y-2">
@@ -119,7 +90,12 @@ const doLogin = () => {
           <label for="rememberme">記住我</label>
         </div>
 
-        <Button label="登入" :loading="isLoading" type="submit" />
+        <Button
+          label="登入"
+          :loading="isLoading"
+          :disabled="isLoginDisabled"
+          type="submit"
+        />
       </form>
     </template>
   </Card>
