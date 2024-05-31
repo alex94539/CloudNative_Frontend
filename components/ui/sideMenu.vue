@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { AdminCreateRoomHandler } from '#build/components'
+
 const items = ref([
   {
     label: '會議室',
@@ -11,9 +13,33 @@ const items = ref([
     icon: 'pi pi-user',
   },
 ])
+const createRoomModal = ref<InstanceType<typeof AdminCreateRoomHandler>>()
+const splitBtnItems = [
+  {
+    label: '建立會議室',
+    icon: 'pi pi-refresh',
+    command: () => {
+      createRoomModal.value?.show()
+    },
+  },
+  {
+    label: '建立使用者',
+    icon: 'pi pi-times',
+    command: () => {},
+  },
+  {
+    label: '建立會議',
+    icon: 'pi pi-external-link',
+    command: () => {},
+  },
+]
 </script>
 <template>
   <div class="pt-10">
+    <AdminCreateRoomHandler ref="createRoomModal" />
+    <SplitButton class="w-full" :model="splitBtnItems" label="新增">
+    </SplitButton>
+
     <PanelMenu :model="items">
       <template #item="{ item }">
         <NuxtLink

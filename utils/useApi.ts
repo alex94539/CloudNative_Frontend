@@ -37,8 +37,8 @@ export const apiGetRoomInfo = async (id: string) => {
 export const apiPatchRoomInfo = async (data: RoomInfo) => {
   const { $authorizedApi } = useNuxtApp()
   const roomId = data._id
-  const body = { ...data } as any
-  delete body._id
+  const { _id, ...body } = data
+
   return await useAsyncData(() =>
     $authorizedApi('/info/room', {
       method: 'PATCH',
@@ -46,6 +46,15 @@ export const apiPatchRoomInfo = async (data: RoomInfo) => {
       query: {
         roomId,
       },
+    })
+  )
+}
+export const apiCreateRoomInfo = async (data: Omit<RoomInfo, '_id'>) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/info/room', {
+      method: 'POST',
+      body: data,
     })
   )
 }

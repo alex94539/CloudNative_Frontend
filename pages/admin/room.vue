@@ -61,7 +61,9 @@ const deleteRoomHandler = (room: RoomInfo) => {
               icon="pi pi-pencil"
               @click="() => openEditModal(slotProps.data._id)"
             />
+            <!-- TODO: unhide it until we have room deletion api -->
             <Button
+              v-if="false"
               :severity="'danger'"
               icon="pi pi-trash"
               @click="() => deleteRoomHandler(slotProps.data)"

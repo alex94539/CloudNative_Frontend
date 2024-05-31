@@ -3,14 +3,6 @@ import type { RoomInfo } from '~/utils/useApi'
 
 type ModalData = Omit<RoomInfo, '__v'>
 
-const props = defineProps<{
-  title: string
-  data: ModalData
-}>()
-const emits = defineEmits<{
-  submit: [data: ModalData]
-}>()
-
 const defaultData: ModalData = {
   _id: '',
   name: '',
@@ -19,6 +11,27 @@ const defaultData: ModalData = {
   area: 0,
   eating: false,
 }
+
+const props = withDefaults(
+  defineProps<{
+    title: string
+    data?: ModalData
+  }>(),
+  {
+    data: () =>
+      ({
+        _id: '',
+        name: '',
+        building: '',
+        capacity: 0,
+        area: 0,
+        eating: false,
+      }) as ModalData,
+  }
+)
+const emits = defineEmits<{
+  submit: [data: ModalData]
+}>()
 
 const modalData = ref<ModalData>(defaultData)
 const dialog = ref()
