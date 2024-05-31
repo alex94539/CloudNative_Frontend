@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   primevue: {},
   runtimeConfig: {
     public: {
-      apiBase: 'http://140.113.194.228:9999/',
+      apiBase: 'https://meeing-center.ddns.net/api',
     },
   },
   ssr: true,
