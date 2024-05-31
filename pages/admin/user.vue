@@ -15,7 +15,16 @@ const selectedRow = ref(0)
       </Column>
       <Column header="姓" field="lastName"></Column>
       <Column header="名" field="firstName"></Column>
-      <Column header="帳號" field="username"></Column>
+      <Column header="帳號" field="username">
+        <template #body="slotProps">
+          <i
+            v-if="slotProps.data.role === 'Admin'"
+            class="pi pi-crown"
+            style="color: var(--primary-color)"
+          />
+          {{ slotProps.data.username }}
+        </template>
+      </Column>
       <Column header="電子信箱" field="email"></Column>
       <!-- TODO: hide it until we have patch user info api -->
       <!-- <Column header="操作">
