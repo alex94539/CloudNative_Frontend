@@ -97,3 +97,84 @@ export const apiCreateUserInfo = async (body: UserListItem) => {
     })
   )
 }
+export interface Reservation {
+  title: string
+  desc: string
+  attendants: string[]
+  timeSlot: number[],
+  rDate: string
+  userId: string
+  roomId: string
+}
+export const apiGetReserveInfo = async (meetId: string) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/info/reserve', {
+      method: 'GET',
+      query: {
+        meetId: meetId
+      }
+    })
+  )
+}
+export const apiCreateReserveInfo = async (formData: FormData) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/info/reserve', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      body: formData
+    })
+  )
+}
+export const apiUpdateReserveInfo = async (meetId: string, uReserve: Partial<Reservation>) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/info/reserve', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      query: {
+        meetId: meetId
+      },
+      body: uReserve
+    })
+  )
+}
+export const apiGetMeetingsInfo = async () => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/info/meetings', {
+      method: 'GET',
+    })
+  )
+}
+export const apiGetMeetingInfo = async (meetId: string) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/info/meeting', {
+      method: 'GET',
+      query: {
+        meetId: meetId
+      }
+    })
+  )
+}
+export const apiSendMeetingMsg = async (meetId: string, formData: FormData) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/info/meeting', {
+      method: 'GET',
+      query: {
+        meetId: meetId
+      },
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      body: formData
+    })
+  )
+}
