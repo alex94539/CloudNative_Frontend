@@ -129,6 +129,18 @@ export const apiCreateReserveInfo = async (formData: FormData) => {
     })
   )
 }
+export const apiGetRoomTimeslotInfo = async (roomId: string, rDate: string) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/info/room_status', {
+      method: 'GET',
+      query: {
+        roomId: roomId,
+        date: rDate
+      }
+    })
+  )
+}
 export const apiUpdateReserveInfo = async (meetId: string, uReserve: Partial<Reservation>) => {
   const { $authorizedApi } = useNuxtApp()
   return await useAsyncData(() =>
@@ -175,6 +187,17 @@ export const apiSendMeetingMsg = async (meetId: string, formData: FormData) => {
         'Content-Type': 'multipart/form-data'
       },
       body: formData
+    })
+  )
+}
+export const apiCancelMeeting = async (meetId: string) => {
+  const { $authorizedApi } = useNuxtApp()
+  return await useAsyncData(() =>
+    $authorizedApi('/info/reserve', {
+      method: 'DELETE',
+      query: {
+        meetId: meetId
+      }
     })
   )
 }
