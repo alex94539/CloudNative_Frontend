@@ -3,6 +3,7 @@ export type Role = 'Admin' | 'User' | null
 interface UserData {
   username: string
   role: Role
+  id: string
 }
 
 export const useUserStore = defineStore('user', () => {

@@ -101,7 +101,7 @@ export interface Reservation {
   title: string
   desc: string
   attendants: string[]
-  timeSlot: number[],
+  timeSlot: number[]
   rDate: string
   userId: string
   roomId: string
@@ -112,47 +112,70 @@ export const apiGetReserveInfo = async (meetId: string) => {
     $authorizedApi('/info/reserve', {
       method: 'GET',
       query: {
-        meetId: meetId
-      }
+        meetId: meetId,
+      },
     })
   )
 }
-export const apiCreateReserveInfo = async (formData: FormData) => {
+export const apiCreateReserveInfo = async (
+  data: Reservation,
+  attachments: FileList
+) => {
   const { $authorizedApi } = useNuxtApp()
+
+  const formData = new FormData()
+  formData.append('title', data.title)
+  formData.append('desc', data.desc)
+  formData.append('rDate', data.rDate)
+  formData.append('userId', data.userId)
+  formData.append('roomId', data.roomId)
+  data.attendants.forEach((v) => formData.append('attendants', v))
+  data.timeSlot.forEach((v) => formData.append('timeSlot', `${v}`))
+  Array.from(attachments).forEach((v) => formData.append('files', v))
+
   return await useAsyncData(() =>
     $authorizedApi('/info/reserve', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      body: formData
+      body: formData,
     })
   )
 }
+export type RoomTimeSlot = number
+export type RoomTimeSlotsInfo = RoomTimeSlot[]
+export interface OccupiedTimeSlotItem {
+  _id: string
+  meeting: string
+  roomId: string
+  timeSlot: number
+  rDate: string
+}
+export type OccupiedTimeSlotInfo = OccupiedTimeSlotItem[]
 export const apiGetRoomTimeslotInfo = async (roomId: string, rDate: string) => {
   const { $authorizedApi } = useNuxtApp()
-  return await useAsyncData(() =>
+  return await useAsyncData<OccupiedTimeSlotInfo>(() =>
     $authorizedApi('/info/room_status', {
-      method: 'GET',
       query: {
         roomId: roomId,
-        date: rDate
-      }
+        date: rDate,
+      },
     })
   )
 }
-export const apiUpdateReserveInfo = async (meetId: string, uReserve: Partial<Reservation>) => {
+export const apiUpdateReserveInfo = async (
+  meetId: string,
+  uReserve: Partial<Reservation>
+) => {
   const { $authorizedApi } = useNuxtApp()
   return await useAsyncData(() =>
     $authorizedApi('/info/reserve', {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       query: {
-        meetId: meetId
+        meetId: meetId,
       },
-      body: uReserve
+      body: uReserve,
     })
   )
 }
@@ -170,8 +193,8 @@ export const apiGetMeetingInfo = async (meetId: string) => {
     $authorizedApi('/info/meeting', {
       method: 'GET',
       query: {
-        meetId: meetId
-      }
+        meetId: meetId,
+      },
     })
   )
 }
@@ -181,12 +204,12 @@ export const apiSendMeetingMsg = async (meetId: string, formData: FormData) => {
     $authorizedApi('/info/meeting', {
       method: 'GET',
       query: {
-        meetId: meetId
+        meetId: meetId,
       },
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
       },
-      body: formData
+      body: formData,
     })
   )
 }
@@ -196,8 +219,8 @@ export const apiCancelMeeting = async (meetId: string) => {
     $authorizedApi('/info/reserve', {
       method: 'DELETE',
       query: {
-        meetId: meetId
-      }
+        meetId,
+      },
     })
   )
 }

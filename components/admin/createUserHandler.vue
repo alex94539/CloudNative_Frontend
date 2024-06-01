@@ -26,7 +26,11 @@ const submitHandler = async (data: UserListItem) => {
 
     if (data.value !== null) {
       visible.value = false
-      toast.add({ summary: '成功新增使用者帳號', severity: 'success', life: 3000 })
+      toast.add({
+        summary: '成功新增使用者帳號',
+        severity: 'success',
+        life: 3000,
+      })
       if (useRoute().path === '/admin/user') {
         await apiGetUserList()
       }

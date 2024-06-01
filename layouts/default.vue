@@ -53,9 +53,9 @@ const { isLoggedIn } = storeToRefs(authStore)
         </ClientOnly>
       </template>
     </Menubar>
-    <div class="grid grid-cols-11 h-full gap-x-6">
+    <div class="lg:grid grid-cols-11 h-full gap-x-6">
       <UiSideMenu class="col-span-2" />
-      <div class="col-span-9">
+      <div class="col-span-9 m-10">
         <slot />
       </div>
     </div>

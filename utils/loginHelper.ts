@@ -3,11 +3,11 @@ export default {
     const authStore = useAuthStore()
     const { setJwtToken, parseJwt } = authStore
     setJwtToken(token, rememberMe)
-    const jwtPayload = parseJwt()
+    const { _id, ...jwtPayload } = parseJwt()
 
     const userStore = useUserStore()
     const { set: setUser } = userStore
-    setUser(jwtPayload, rememberMe)
+    setUser({ id: _id, ...jwtPayload }, rememberMe)
   },
   logout() {
     const authStore = useAuthStore()

@@ -35,8 +35,10 @@ const splitBtnItems = [
   },
   {
     label: '建立會議',
-    icon: 'pi pi-external-link',
-    command: () => {},
+    icon: 'pi pi-calendar',
+    command: () => {
+      navigateTo('/meet/new')
+    },
   },
 ]
 </script>
