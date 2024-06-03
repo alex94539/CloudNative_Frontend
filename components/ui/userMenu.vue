@@ -12,6 +12,7 @@ const items = ref([
         command: () => {
           emits('logout')
           loginHelper.logout()
+          navigateTo('/')
         },
       },
     ],

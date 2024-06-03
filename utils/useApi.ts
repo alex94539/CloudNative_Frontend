@@ -78,9 +78,16 @@ export const apiGetUserList = async () => {
     server: false,
   })
 }
+export interface UserInfo {
+  _id: string
+  role: 'Admin' | 'User'
+  email: string
+  lastName: string
+  username: string
+}
 export const apiGetUserInfo = async (userId: string) => {
   const { $authorizedApi } = useNuxtApp()
-  return await useAsyncData(() =>
+  return await useAsyncData<UserInfo>(() =>
     $authorizedApi('/user/user', {
       query: {
         userId,
@@ -179,19 +186,20 @@ export const apiUpdateReserveInfo = async (
     })
   )
 }
+export interface MeetingInfo extends Omit<Reservation, 'timeSlot'> {
+  _id: string
+  timeSlots: number[]
+}
 export const apiGetMeetingsInfo = async () => {
   const { $authorizedApi } = useNuxtApp()
-  return await useAsyncData(() =>
-    $authorizedApi('/info/meetings', {
-      method: 'GET',
-    })
+  return await useAsyncData<MeetingInfo[]>(() =>
+    $authorizedApi('/info/meetings', {})
   )
 }
 export const apiGetMeetingInfo = async (meetId: string) => {
   const { $authorizedApi } = useNuxtApp()
-  return await useAsyncData(() =>
+  return await useAsyncData<MeetingInfo>(() =>
     $authorizedApi('/info/meeting', {
-      method: 'GET',
       query: {
         meetId: meetId,
       },

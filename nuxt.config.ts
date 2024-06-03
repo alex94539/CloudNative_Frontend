@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/mdc',
+    '@nuxt/image',
   ],
   css: ['~/assets/css/main.css'],
   postcss: {

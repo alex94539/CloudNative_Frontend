@@ -1,3 +1,5 @@
 <template>
-  <div></div>
+  <div>
+    <HomeUpcomingMeet />
+  </div>
 </template>

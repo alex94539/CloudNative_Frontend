@@ -1,4 +1,6 @@
 <script setup lang="ts"></script>
 <template>
-  <div>Admin</div>
+  <div>
+    <HomeUpcomingMeet />
+  </div>
 </template>

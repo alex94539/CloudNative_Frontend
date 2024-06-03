@@ -79,9 +79,10 @@ const submitHandler = async () => {
 </script>
 
 <script lang="ts">
+const tomorrowDate = () => new Date(new Date().getTime() + 1000 * 3600 * 24)
 const defaultData = {
   name: '',
-  date: new Date(),
+  date: tomorrowDate(),
   room: '',
   desc: '',
 }
@@ -105,7 +106,7 @@ const defaultData = {
                 date-format="yy/mm/dd"
                 :manual-input="false"
                 panel-class="!min-w-[20rem] !max-w-[22rem]"
-                :min-date="new Date()"
+                :min-date="tomorrowDate()"
               />
             </div>
 

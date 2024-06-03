@@ -16,23 +16,29 @@ const items = ref([
     icon: 'pi pi-user',
   },
 ])
+const userStore = useUserStore()
+const { isAdmin } = storeToRefs(userStore)
 const createRoomModal = ref<InstanceType<typeof AdminCreateRoomHandler>>()
 const createUserModal = ref<InstanceType<typeof AdminCreateUserHandler>>()
-const splitBtnItems = [
-  {
-    label: '建立會議室',
-    icon: 'pi pi-refresh',
-    command: () => {
-      createRoomModal.value?.show()
-    },
-  },
-  {
-    label: '建立使用者',
-    icon: 'pi pi-user',
-    command: () => {
-      createUserModal.value?.show()
-    },
-  },
+const splitBtnItems = computed(() => [
+  ...(isAdmin.value
+    ? [
+        {
+          label: '建立會議室',
+          icon: 'pi pi-refresh',
+          command: () => {
+            createRoomModal.value?.show()
+          },
+        },
+        isAdmin.value && {
+          label: '建立使用者',
+          icon: 'pi pi-user',
+          command: () => {
+            createUserModal.value?.show()
+          },
+        },
+      ]
+    : []),
   {
     label: '建立會議',
     icon: 'pi pi-calendar',
@@ -40,8 +46,9 @@ const splitBtnItems = [
       navigateTo('/meet/new')
     },
   },
-]
+])
 </script>
+
 <template>
   <div class="pt-10">
     <AdminCreateRoomHandler ref="createRoomModal" />
