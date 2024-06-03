@@ -8,14 +8,12 @@ const props = withDefaults(
 )
 
 const data = ref(defaultData)
-const startTime = 0
-const endTime = 0
 </script>
 
 <script lang="ts">
 interface ReservationData {
   title: string
-  timeslot: number[]
+  timeslots: number[]
   attendants: string[]
   host: string
   desc: string
@@ -34,7 +32,7 @@ const defaultData: ReservationData = {
   host: '',
   date: '',
   attendants: [],
-  timeslot: [],
+  timeslots: [],
   roomInfo: {
     room: '',
     building: '',
@@ -60,16 +58,19 @@ const defaultData: ReservationData = {
             <div v-else>由{{ ` ${props.values.host} ` }}發起</div>
             <div>
               <i class="pi pi-clock" />
-              {{ displayTimeslot(startTime) }}~{{ displayTimeslot(endTime) }}
+              {{ displayTimeslot(props.values.timeslots[0]) }}~{{
+                displayTimeslot(props.values.timeslots.at(-1)!)
+              }}
             </div>
             <div>
               <i class="pi pi-building" />
               {{ props.values.roomInfo.building }} -
               {{ props.values.roomInfo.room }}
             </div>
-            <div v-if="!(props.values.roomInfo.eating)">
-              <i  class="pi pi-exclamation-circle text-red-500"/>
-              禁止飲食</div>
+            <div v-if="!props.values.roomInfo.eating">
+              <i class="pi pi-exclamation-circle text-red-500" />
+              禁止飲食
+            </div>
           </div>
           <div class="mt-8">
             <div class="font-semibold text-xl">與會者</div>

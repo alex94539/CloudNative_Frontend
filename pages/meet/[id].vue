@@ -26,7 +26,11 @@ watchEffect(async () => {
       area: roomData.data.value.area,
     }
     data.value.roomInfo = roomInfo
-    ;({ title: data.value.title, desc: data.value.desc } = api.data.value)
+    ;({
+      title: data.value.title,
+      desc: data.value.desc,
+      timeSlots: data.value.timeslots,
+    } = api.data.value)
   }
 })
 
@@ -35,7 +39,7 @@ const data = ref({
   desc: '',
   host: '',
   date: '',
-  timeslot: [],
+  timeslots: [] as number[],
   attendants: [] as string[],
   roomInfo: {
     room: '',
@@ -49,7 +53,6 @@ const isApiLoaded = computed(
   () => api.data.value !== null && api.status.value === 'success'
 )
 watch(api.data, (v) => console.log(v))
-
 
 watchEffect(async () => {
   if (api.data.value === null) return
