@@ -17,7 +17,17 @@ interface TimeSlotChoice {
 }
 const availableTimeslots = ref<TimeSlotChoice[]>([])
 const selectedRoom = ref({ no: -1, name: '' })
-const selectedTimeSlot = ref<TimeSlotChoice[]>([])
+const selectedStartTimeSlot = ref<TimeSlotChoice>()
+const selectedEndTimeSlot = ref<TimeSlotChoice>()
+const isEndTimeslotSelectionAllowed = computed(() => {
+  if (selectedStartTimeSlot.value === undefined) return false
+  return true
+})
+const endTimeslotChoices = computed(():TimeSlotChoice[] => {
+  if(!(isEndTimeslotSelectionAllowed.value))  return []
+  const startIdx=availableTimeslots.value.indexOf(selectedStartTimeSlot.value!)
+  return [...availableTimeslots.value].slice(startIdx+1)
+})
 
 const formatDateString = (date: Date) => {
   const offset = date.getTimezoneOffset()
@@ -41,7 +51,7 @@ watchEffect(async () => {
       availableTimeslots.value = availableTimeslotIds.map((x) => {
         return {
           timeslot: x,
-          displayName: getDisplayTimeslot(x),
+          displayName: displayTimeslot(x),
         }
       })
     }
@@ -50,16 +60,7 @@ watchEffect(async () => {
 
 const fileToUpload = ref<FileList>()
 
-const getDisplayTimeslot = (id: number) => {
-  const startHour = 8
-  const hour = Math.floor(startHour + id / 2)
-  const minute = String((id % 2) * 30).padEnd(2, '0')
-
-  return [hour, minute].join(':')
-}
-
 const toast = useToast()
-const createReserveInfoApi = ref()
 const submitHandler = async () => {
   const emptyFileList = new DataTransfer().files
   const api = await apiCreateReserveInfo(
@@ -68,7 +69,7 @@ const submitHandler = async () => {
       title: data.value.name,
       desc: data.value.desc,
       roomId: roomApi.data.value![selectedRoom.value.no]._id,
-      timeSlot: selectedTimeSlot.value.map((v) => v.timeslot),
+      timeSlot: [...Array(selectedEndTimeSlot.value?.timeslot).keys()].slice(selectedStartTimeSlot.value?.timeslot),
       attendants: [useUserStore().data.id],
       userId: useUserStore().data.id,
     },
@@ -123,13 +124,24 @@ const defaultData = {
 
             <Transition name="fade">
               <div v-show="selectedRoom.no !== -1" class="flex flex-col gap-1">
-                <label>會議時間</label>
-                <MultiSelect
-                  v-model="selectedTimeSlot"
-                  placeholder="選擇時段"
-                  :options="availableTimeslots"
-                  option-label="displayName"
-                />
+                <label>預約時段</label>
+                <div class="flex w-full gap-2">
+                  <Dropdown
+                    v-model="selectedStartTimeSlot"
+                    placeholder="選擇開始時間"
+                    :options="availableTimeslots"
+                    option-label="displayName"
+                    class="w-full"
+                  />
+                  <Dropdown
+                    v-model="selectedEndTimeSlot"
+                    placeholder="選擇結束時間"
+                  :disabled="!isEndTimeslotSelectionAllowed"
+                    option-label="displayName"
+                    :options="endTimeslotChoices"
+                    class="w-full"
+                  />
+                </div>
                 <small>最小預約單位為30分鐘</small>
               </div>
             </Transition>

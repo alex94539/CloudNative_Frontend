@@ -25,7 +25,7 @@ const { data } = await apiGetMeetingsInfo()
                       <i class="pi pi-calendar" />
                       {{ i.rDate }}
                     </div>
-                    <div v-if="i.timeSlots.length > 2">
+                    <div v-if="i.timeSlots.length >= 2">
                       <i class="pi pi-clock" />
                       {{ displayTimeslot(i.timeSlots[0]) }}~{{
                         displayTimeslot(i.timeSlots.at(-1)!)
