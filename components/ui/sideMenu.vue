@@ -4,18 +4,22 @@ import {
   type AdminCreateUserHandler,
 } from '#components'
 
-const items = ref([
-  {
-    label: '會議室',
-    route: '/admin/room',
-    icon: 'pi pi-table',
-  },
-  {
-    label: '使用者',
-    route: '/admin/user',
-    icon: 'pi pi-user',
-  },
-])
+const items = computed(() =>
+  isAdmin.value
+    ? 
+    [
+        {
+          label: '會議室',
+          route: '/admin/room',
+          icon: 'pi pi-table',
+        },
+        {
+          label: '使用者',
+          route: '/admin/user',
+          icon: 'pi pi-user',
+        },
+      ]:[]
+)
 const userStore = useUserStore()
 const { isAdmin } = storeToRefs(userStore)
 const createRoomModal = ref<InstanceType<typeof AdminCreateRoomHandler>>()
@@ -56,7 +60,7 @@ const splitBtnItems = computed(() => [
     <SplitButton class="w-full" :model="splitBtnItems" label="新增">
     </SplitButton>
 
-    <PanelMenu :model="items">
+    <PanelMenu :model="items" class="mt-3">
       <template #item="{ item }">
         <NuxtLink
           v-if="item.route"
