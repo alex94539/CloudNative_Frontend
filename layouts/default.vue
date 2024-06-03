@@ -53,10 +53,19 @@ const { isLoggedIn } = storeToRefs(authStore)
         </ClientOnly>
       </template>
     </Menubar>
-    <div class="lg:grid grid-cols-11 h-full gap-x-6">
+    <div v-if="isLoggedIn" class="lg:grid grid-cols-11 h-full gap-x-6">
       <UiSideMenu class="col-span-2 ml-6" />
       <div class="col-span-9 m-10">
         <slot />
+      </div>
+    </div>
+    <div class="flex w-full px-44">
+      <div class="flex flex-col grow">
+        <div class="font-black text-7xl mt-[25vh]">Meeting Center</div>
+        <div class="font-bold text-4xl mt-6">會議室預約系統</div>
+      </div>
+      <div>
+        <img src="~/assets/195.Collaboration.png" alt="">
       </div>
     </div>
   </div>
