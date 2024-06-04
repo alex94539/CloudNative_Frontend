@@ -6,6 +6,10 @@ const props = withDefaults(
   }>(),
   { values: () => defaultData }
 )
+const emits=defineEmits<{
+  delete: []
+  edit: []
+}>()
 
 const data = ref(defaultData)
 </script>
@@ -50,7 +54,10 @@ const defaultData: ReservationData = {
       <template #content>
         <div class="flex">
           <h1 class="font-semibold text-3xl grow">{{ props.values.title }}</h1>
-          <Button v-if="props.isHost" label="編輯" />
+          <div v-if="props.isHost" class="flex gap-1">
+            <Button label="刪除" @click="emits('delete')" severity="danger" />
+            <Button  label="編輯" @click="emits('edit')" />
+          </div>
         </div>
         <div>
           <div class="flex flex-col gap-2 mt-4">
@@ -59,7 +66,7 @@ const defaultData: ReservationData = {
             <div>
               <i class="pi pi-clock" />
               {{ displayTimeslot(props.values.timeslots[0]) }}~{{
-                displayTimeslot(props.values.timeslots.at(-1)!)
+                displayTimeslot(props.values.timeslots.at(-1)!+1)
               }}
             </div>
             <div>

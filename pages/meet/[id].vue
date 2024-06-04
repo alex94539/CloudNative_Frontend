@@ -62,14 +62,42 @@ watchEffect(async () => {
   )
   data.value.attendants = attenantsData.map((x) => x.data.value!.username)
 })
+
+const confirmService = useConfirm()
+const toast = useToast()
+const cancelMeetingHandler = () => {
+  confirmService.require({
+    header: '警告',
+    icon: 'pi pi-exclamation-triangle',
+    message: `確定要取消「${data.value.title}」嗎？`,
+    rejectLabel: '取消',
+    acceptLabel: '確認',
+    acceptClass: 'p-button-danger',
+    rejectClass: 'p-button-secondary',
+    blockScroll: true,
+    accept() {
+      apiCancelMeeting(queryMeetId).then(() => {
+        toast.add({
+          summary: '成功取消會議預約',
+          severity: 'success',
+          life: 3000,
+        })
+        navigateTo('/')
+      })
+    },
+  })
+}
 </script>
 
 <template>
   <div>
+    <ConfirmDialog />
     <MeetDetails
       v-if="isApiLoaded"
       :values="data"
       :is-host="api.data.value?.userId === useUserStore().data.id"
+      @edit="navigateTo(`/meet/edit/${queryMeetId}`)"
+      @delete="cancelMeetingHandler"
     ></MeetDetails>
   </div>
 </template>

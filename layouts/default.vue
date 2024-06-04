@@ -59,13 +59,13 @@ const { isLoggedIn } = storeToRefs(authStore)
         <slot />
       </div>
     </div>
-    <div class="flex w-full px-44">
+    <div v-if="!isLoggedIn" class="flex w-full px-44">
       <div class="flex flex-col grow">
         <div class="font-black text-7xl mt-[25vh]">Meeting Center</div>
         <div class="font-bold text-4xl mt-6">會議室預約系統</div>
       </div>
       <div>
-        <img src="~/assets/195.Collaboration.png" alt="">
+        <img src="~/assets/195.Collaboration.png" alt="" />
       </div>
     </div>
   </div>

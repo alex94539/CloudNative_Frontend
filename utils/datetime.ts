@@ -5,3 +5,11 @@ export const displayTimeslot = (id: number) => {
 
   return [hour, minute].join(':')
 }
+
+export const formatDateString = (date: Date) => {
+  // Get UTC+8 date
+  const offset = date.getTimezoneOffset()
+  return new Date(date.getTime() - offset * 60 * 1000)
+    .toISOString()
+    .slice(0, 10)
+}
