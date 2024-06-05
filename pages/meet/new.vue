@@ -23,13 +23,16 @@ const isEndTimeslotSelectionAllowed = computed(() => {
   if (selectedStartTimeSlot.value === undefined) return false
   return true
 })
-const endTimeslotChoices = computed(():TimeSlotChoice[] => {
-  if(!(isEndTimeslotSelectionAllowed.value))  return []
-  const startIdx=availableTimeslots.value.indexOf(selectedStartTimeSlot.value!)
-  return [...availableTimeslots.value].slice(startIdx+1)
+const endTimeslotChoices = computed((): TimeSlotChoice[] => {
+  if (!isEndTimeslotSelectionAllowed.value) return []
+  const startIdx = availableTimeslots.value.indexOf(
+    selectedStartTimeSlot.value!
+  )
+  return [...availableTimeslots.value].slice(startIdx + 1)
 })
 
 const formatDateString = (date: Date) => {
+  // Get UTC+8 date
   const offset = date.getTimezoneOffset()
   return new Date(date.getTime() - offset * 60 * 1000)
     .toISOString()
@@ -69,7 +72,9 @@ const submitHandler = async () => {
       title: data.value.name,
       desc: data.value.desc,
       roomId: roomApi.data.value![selectedRoom.value.no]._id,
-      timeSlot: [...Array(selectedEndTimeSlot.value?.timeslot).keys()].slice(selectedStartTimeSlot.value?.timeslot),
+      timeSlot: [...Array(selectedEndTimeSlot.value?.timeslot).keys()].slice(
+        selectedStartTimeSlot.value?.timeslot
+      ),
       attendants: [useUserStore().data.id],
       userId: useUserStore().data.id,
     },
@@ -136,7 +141,7 @@ const defaultData = {
                   <Dropdown
                     v-model="selectedEndTimeSlot"
                     placeholder="選擇結束時間"
-                  :disabled="!isEndTimeslotSelectionAllowed"
+                    :disabled="!isEndTimeslotSelectionAllowed"
                     option-label="displayName"
                     :options="endTimeslotChoices"
                     class="w-full"
@@ -148,11 +153,7 @@ const defaultData = {
 
             <div class="flex flex-col">
               <div>會議大綱</div>
-              <Editor
-                v-model="data.desc"
-                editor-style="min-height: 10rem; height: fit-content; "
-                class="mt-1"
-              />
+              <Textarea v-model="data.desc" class="mt-1" />
 
               <UiFileUpload
                 v-model="fileToUpload"
@@ -165,7 +166,7 @@ const defaultData = {
             <div class="flex flex-col">
               <Fieldset legend="與會者">
                 <Chips></Chips>
-                <div>
+                <div class="mt-2">
                   <Chip>您</Chip>
                 </div>
               </Fieldset>
@@ -175,7 +176,7 @@ const defaultData = {
       </template>
     </Card>
     <div class="flex justify-end gap-2 mt-4">
-      <Button label="取消" outlined />
+      <Button label="取消" outlined @click="useRouter().back()" />
       <Button
         label="下一步"
         @click="

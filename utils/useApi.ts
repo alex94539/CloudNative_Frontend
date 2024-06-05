@@ -115,9 +115,17 @@ export interface Reservation {
 }
 export const apiGetReserveInfo = async (meetId: string) => {
   const { $authorizedApi } = useNuxtApp()
-  return await useAsyncData(() =>
+  return await useAsyncData<{
+    attendants: string[]
+    desc: string
+    rDate: string
+    roomId: string
+    timeSlots: number[]
+    title: string
+    userId: string
+    _id: string
+  }>(() =>
     $authorizedApi('/info/reserve', {
-      method: 'GET',
       query: {
         meetId: meetId,
       },
